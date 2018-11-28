@@ -70,11 +70,10 @@ namespace IconSDK.Types
 
         public override bool Equals(object obj)
         {
-            var bytes = obj as Bytes;
-            if (bytes != null)
-                return this == bytes;
+            if (obj is null)
+                return false;
 
-            return false;
+            return this == (obj as Bytes);
         }
 
         public static implicit operator byte[](Bytes bytes)
@@ -89,6 +88,15 @@ namespace IconSDK.Types
 
         public static bool operator ==(Bytes x, Bytes y)
         {
+            if (x is null && y is null)
+                return true;
+
+            if (x is null || y is null)
+                return false;
+
+            if (x.Binary.Length != y.Binary.Length)
+                return false;
+
             return Enumerable.SequenceEqual(x.Binary, y.Binary);
         }
 
