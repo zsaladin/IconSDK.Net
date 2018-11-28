@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using System.Threading.Tasks;
+using System.Security.Cryptography;
 
 namespace IconSDK.Types
 {
@@ -27,6 +27,16 @@ namespace IconSDK.Types
             : base(value)
         {
 
+        }
+
+        public static PrivateKey Random()
+        {
+            byte[] bytes = new byte[32];
+
+            var rng = new RNGCryptoServiceProvider();
+            rng.GetBytes(bytes);
+
+            return new PrivateKey(bytes);
         }
 
         public static implicit operator PrivateKey(string hex)
