@@ -46,9 +46,9 @@ namespace IconSDK.Wallet
             return Create(KeyStore.Load(password, keyStoreFilePath));
         }
 
-        public void Store(string password, string keyStoreFilePath = null)
+        public string Store(string password, string keyStoreFilePath = null)
         {
-            KeyStore.Create(PrivateKey, Address).Store(password, keyStoreFilePath);
+            return KeyStore.Create(PrivateKey, Address).Store(password, keyStoreFilePath);
         }
 
         public async Task<BigInteger> GetBalance()
