@@ -23,7 +23,7 @@ namespace IconSDK.Wallet
             Address = address;
         }
 
-        public static KeyStore Load(string filePath, string password)
+        public static KeyStore Load(string password, string filePath)
         {
             var file = File.OpenText(filePath);
             var json = file.ReadToEnd();
@@ -34,7 +34,7 @@ namespace IconSDK.Wallet
             return new KeyStore(new PrivateKey(privateKey), new ExternalAddress(address));
         }
 
-        public void Store(string filePath, string password)
+        public string Store(string password, string filePath = null)
         {
             var json = _keyStoreService.EncryptAndGenerateDefaultKeyStoreAsJson(
                 password,
@@ -45,7 +45,11 @@ namespace IconSDK.Wallet
             JToken token = JObject.Parse(json);
             token["coinType"] = "icx";
 
+            if (filePath == null)
+                filePath = _keyStoreService.GenerateUTCFileName(Address.ToString());
+
             File.WriteAllText(filePath, token.ToString(Formatting.None));
+            return filePath;
         }
     }
 }

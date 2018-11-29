@@ -14,9 +14,6 @@ namespace IconSDK.Tests
         public void Test_KeyStore()
         {
             Random random = new Random();
-            byte[] fileNameBytes = new byte[random.Next() % 32];
-            random.NextBytes(fileNameBytes);
-            string fileName = Convert.ToBase64String(fileNameBytes);
 
             byte[] passwordBytes = new byte[random.Next() % 256];
             random.NextBytes(passwordBytes);
@@ -26,9 +23,8 @@ namespace IconSDK.Tests
             ExternalAddress address = Addresser.Create(privateKey);
 
             KeyStore keyStore = new KeyStore(privateKey, address);
-            keyStore.Store(fileName, password);
-
-            keyStore = KeyStore.Load(fileName, password);
+            string fileName = keyStore.Store(password);
+            keyStore = KeyStore.Load(password, fileName);
 
             File.Delete(fileName);
 
