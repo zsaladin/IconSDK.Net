@@ -9,6 +9,7 @@ namespace IconSDK.Transaction
 {
     using Crypto;
     using Types;
+    using Extensions;
 
     public class TransactionBuilder
     {
@@ -44,16 +45,16 @@ namespace IconSDK.Transaction
                 ["version"] = Version ?? "0x3",
                 ["from"] = from.ToString(),
                 ["to"] = To.ToString(),
-                ["stepLimit"] = $"0x{StepLimit.Value.ToString("x")}",
-                ["nid"] = $"0x{NID.Value.ToString("x")}",
-                ["timestamp"] = $"0x{Timestamp.Value.ToString("x")}",
+                ["stepLimit"] = StepLimit.Value.ToHex0x(),
+                ["nid"] = NID.Value.ToHex0x(),
+                ["timestamp"] = Timestamp.Value.ToHex0x(),
             };
 
             if (Value.HasValue)
-                param["value"] = $"0x{Value.Value.ToString("x")}";
+                param["value"] = Value.Value.ToHex0x();
 
             if (Nonce.HasValue)
-                param["nonce"] = $"0x{Nonce.Value.ToString("x")}";
+                param["nonce"] = Nonce.Value.ToHex0x();
 
             if (DataType != null && Data != null)
             {
