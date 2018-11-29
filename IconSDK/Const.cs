@@ -1,7 +1,11 @@
+using System.Numerics;
+
 namespace IconSDK
 {
     public static class Consts
     {
+        public static readonly BigInteger Loop2ICX = BigInteger.Pow(10, 18);
+
         public static class ApiUrl
         {
             public const string MainNet = "https://wallet.icon.foundation/api/v3";

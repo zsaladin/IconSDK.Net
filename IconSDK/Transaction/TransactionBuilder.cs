@@ -13,7 +13,7 @@ namespace IconSDK.Transaction
 
     public class TransactionBuilder
     {
-        public string Version;
+        public string Version = "0x3";
         public PrivateKey PrivateKey;
         public Address To;
         public BigInteger? Value;
@@ -42,7 +42,7 @@ namespace IconSDK.Transaction
 
             var param = new Dictionary<string, object>()
             {
-                ["version"] = Version ?? "0x3",
+                ["version"] = Version,
                 ["from"] = from.ToString(),
                 ["to"] = To.ToString(),
                 ["stepLimit"] = StepLimit.Value.ToHex0x(),
