@@ -56,10 +56,7 @@ namespace IconSDK.RPC
         {
             var request = new CallRequestMessage(from, to, dataType, data);
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return response.result;
-
-            throw new Exception(response.Error.Message);
+            return response.result;
         }
     }
 }

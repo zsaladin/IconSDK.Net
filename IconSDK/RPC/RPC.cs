@@ -31,7 +31,10 @@ namespace IconSDK.RPC
                 ))
                 {
                     string resultContent = await result.Content.ReadAsStringAsync();
-                    return JsonConvert.DeserializeObject<TRPCResponseMessage>(resultContent);
+                    var responseMessage = JsonConvert.DeserializeObject<TRPCResponseMessage>(resultContent);
+                    if (!responseMessage.IsSuccess)
+                        throw RPCException.Create(responseMessage.Error.Code, responseMessage.Error.Message);
+                    return responseMessage;
                 }
             }
         }

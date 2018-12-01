@@ -36,10 +36,7 @@ namespace IconSDK.RPC
             var ts = new TransactionSerializer();
             var request = new SendTransactionRequestMessage(ts.Serialize(tx));
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return new Hash32(response.result);
-
-            throw new Exception(response.Error.Message);
+            return response.result;
         }
     }
 }

@@ -43,10 +43,7 @@ namespace IconSDK.RPC
         {
             var request = new GetBalanceRequestMessage(address);
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return BigInteger.Parse(response.result.Replace("0x", "00"), NumberStyles.HexNumber);
-
-            throw new Exception(response.Error.Message);
+            return BigInteger.Parse(response.result.Replace("0x", "00"), NumberStyles.HexNumber);
         }
     }
 }
