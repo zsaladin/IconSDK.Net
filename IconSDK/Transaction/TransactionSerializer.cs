@@ -5,6 +5,7 @@ using System.Text;
 namespace IconSDK.Transaction
 {
 	using Types;
+	using Extensions;
 
 	public class TransactionSerializer
 	{
@@ -12,20 +13,20 @@ namespace IconSDK.Transaction
 		{
 			var param = new Dictionary<string, object>()
 			{
-				["version"] = "0x3",
+				["version"] = tx.Version,
 				["from"] = tx.From.ToString(),
 				["to"] = tx.To.ToString(),
-				["stepLimit"] = $"0x{tx.StepLimit.Value.ToString("x")}",
-				["timestamp"] = $"0x{tx.Timestamp.Value.ToString("x")}",
-				["nid"] = $"0x{tx.NID.Value.ToString("x")}",
+				["stepLimit"] = tx.StepLimit.Value.ToHex0x(),
+				["timestamp"] = tx.Timestamp.Value.ToHex0x(),
+				["nid"] = tx.NID.Value.ToHex0x(),
 				["signature"] = tx.Signature.ToBase64(),
 			};
 
 			if (tx.Value.HasValue)
-				param["value"] = $"0x{tx.Value.Value.ToString("x")}";
+				param["value"] = tx.Value.Value.ToHex0x();
 
 			if (tx.Nonce.HasValue)
-				param["nonce"] = $"0x{tx.Nonce.Value.ToString("x")}";
+				param["nonce"] = tx.Nonce.Value.ToHex0x();
 
 			if (tx.Data != null)
 			{

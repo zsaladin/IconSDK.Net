@@ -17,10 +17,15 @@ namespace IconSDK.Wallet
         public readonly PrivateKey PrivateKey;
         public readonly ExternalAddress Address;
 
-        public KeyStore(PrivateKey privateKey, ExternalAddress address)
+        private KeyStore(PrivateKey privateKey, ExternalAddress address)
         {
             PrivateKey = privateKey;
             Address = address;
+        }
+
+        public static KeyStore Create(PrivateKey privateKey, ExternalAddress address)
+        {
+            return new KeyStore(privateKey, address);
         }
 
         public static KeyStore Load(string password, string filePath)
