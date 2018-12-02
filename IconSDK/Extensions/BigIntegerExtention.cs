@@ -9,31 +9,37 @@ namespace IconSDK.Extensions
     {
         public static string ToHex(this BigInteger bigInteger)
         {
-            if (bigInteger >= 0)
+            if (bigInteger > 0)
             {
                 var result = bigInteger.ToString("x");
-                if (result.Length > 1 && result[0] == '0')
+                if (result[0] == '0')
                     result = result.Substring(1);
                 return result;
             }
-            else
+
+            if (bigInteger < 0)
             {
                 bigInteger = -bigInteger;
                 return $"-{bigInteger.ToString("x")}";
             }
+
+            return "0";
         }
 
         public static string ToHex0x(this BigInteger bigInteger)
         {
-            if (bigInteger >= 0)
+            if (bigInteger > 0)
             {
                 return $"0x{bigInteger.ToHex()}";
             }
-            else
+
+            if (bigInteger < 0)
             {
                 bigInteger = -bigInteger;
                 return $"-0x{bigInteger.ToString("x")}";
             }
+
+            return "0x0";
         }
 
         public static BigInteger ToBigInteger(this string hex)
