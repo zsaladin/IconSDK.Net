@@ -9,8 +9,6 @@ namespace IconSDK.Types
 {
     public abstract class Address : Bytes
     {
-        public override uint Size => 20;
-
         public Address(IEnumerable<byte> bytes)
             : base(bytes)
         {
@@ -40,8 +38,6 @@ namespace IconSDK.Types
 
     public class ExternalAddress : Address
     {
-        public override string Prefix => "hx";
-
         public ExternalAddress(IEnumerable<byte> bytes)
             : base(bytes)
         {
@@ -73,8 +69,6 @@ namespace IconSDK.Types
 
     public class ContractAddress : Address
     {
-        public override string Prefix => "cx";
-
         public ContractAddress(IEnumerable<byte> bytes)
             : base(bytes)
         {

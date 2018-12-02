@@ -9,9 +9,6 @@ namespace IconSDK.Types
 {
     public class Hash32 : Bytes
     {
-        public override uint Size => 32;
-        public override string Prefix => "0x";
-
         public Hash32(IEnumerable<byte> bytes)
             : base(bytes)
         {

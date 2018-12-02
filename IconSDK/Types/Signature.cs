@@ -8,8 +8,6 @@ namespace IconSDK.Types
 {
     public class Signature : Bytes
     {
-        public override uint Size => 65;
-
         public Signature(IEnumerable<byte> bytes)
             : base(bytes)
         {

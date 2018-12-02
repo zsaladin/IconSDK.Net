@@ -10,10 +10,36 @@ namespace IconSDK.Types
 {
     public class Bytes
     {
+        #region ** static **
+
+        static Dictionary<Type, int> _sizes = new Dictionary<Type, int>
+        {
+            [typeof(Bytes)] = 0,
+            [typeof(ExternalAddress)] = 20,
+            [typeof(ContractAddress)] = 20,
+            [typeof(Hash32)] = 32,
+            [typeof(PrivateKey)] = 32,
+            [typeof(PublicKey)] = 65,
+            [typeof(Signature)] = 65,
+        };
+
+        static Dictionary<Type, string> _prefixes = new Dictionary<Type, string>
+        {
+            [typeof(Bytes)] = string.Empty,
+            [typeof(ExternalAddress)] = "hx",
+            [typeof(ContractAddress)] = "cx",
+            [typeof(Hash32)] = "0x",
+            [typeof(PrivateKey)] = string.Empty,
+            [typeof(PublicKey)] = string.Empty,
+            [typeof(Signature)] = string.Empty
+        };
+
+        #endregion
+
         public readonly ImmutableArray<byte> Binary;
 
-        public virtual uint Size => 0;
-        public virtual string Prefix => string.Empty;
+        public int Size => _sizes[this.GetType()];
+        public string Prefix => _prefixes[this.GetType()];
 
         public Bytes(IEnumerable<byte> bytes)
         {

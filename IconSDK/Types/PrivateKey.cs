@@ -9,8 +9,6 @@ namespace IconSDK.Types
 {
     public class PrivateKey : Bytes
     {
-        public override uint Size => 32;
-
         public PrivateKey(IEnumerable<byte> bytes)
             : base(bytes)
         {
