@@ -36,7 +36,7 @@ namespace IconSDK.RPC
             var ts = new TransactionSerializer();
             var request = new SendTransactionRequestMessage(ts.Serialize(tx));
             var response = await Invoke(request);
-            return response.result;
+            return response.Result;
         }
     }
 }

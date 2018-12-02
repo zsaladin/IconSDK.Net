@@ -11,7 +11,7 @@ namespace IconSDK.RPC
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="txHash")]
+            [JsonProperty]
             public readonly string TxHash;
 
             public Parameter(Hash32 hash)

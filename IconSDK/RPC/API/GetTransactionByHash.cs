@@ -11,7 +11,7 @@ namespace IconSDK.RPC
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="txHash")]
+            [JsonProperty]
             public readonly string TxHash;
 
             public Parameter(Hash32 hash)
@@ -27,9 +27,41 @@ namespace IconSDK.RPC
         }
     }
 
-    public class GetTransactionByHashResponseMessage : RPCResponseMessage<object>
+    public class GetTransactionByHashResponseMessage : RPCResponseMessage<GetTransactionByHashResponseMessage.TransactionInfo>
     {
-
+        public class TransactionInfo
+        {
+            [JsonProperty]
+            public readonly string Version;
+            [JsonProperty]
+            public readonly string Method;
+            [JsonProperty]
+            public readonly Address From;
+            [JsonProperty]
+            public readonly Address To;
+            [JsonProperty]
+            public readonly BigInteger Value;
+            [JsonProperty]
+            public readonly BigInteger Fee;
+            [JsonProperty]
+            public readonly BigInteger StepLimit;
+            [JsonProperty]
+            public readonly BigInteger Timestamp;
+            [JsonProperty]
+            public readonly BigInteger NID;
+            [JsonProperty]
+            public readonly BigInteger Nonce;
+            [JsonProperty]
+            public readonly Signature Signature;
+            [JsonProperty]
+            public readonly Hash32 TxHash;
+            [JsonProperty]
+            public readonly BigInteger TxIndex;
+            [JsonProperty]
+            public readonly BigInteger BlockHeight;
+            [JsonProperty]
+            public readonly Hash32 BlockHash;
+        }
     }
 
     public class GetTransactionByHash : RPC<GetTransactionByHashRequestMessage, GetTransactionByHashResponseMessage>
@@ -39,11 +71,11 @@ namespace IconSDK.RPC
 
         }
 
-        public async Task<bool> Invoke(Hash32 hash)
+        public async Task<GetTransactionByHashResponseMessage.TransactionInfo> Invoke(Hash32 hash)
         {
             var request = new GetTransactionByHashRequestMessage(hash);
             var response = await Invoke(request);
-            return response.IsSuccess;
+            return response.Result;
         }
     }
 }

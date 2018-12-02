@@ -10,7 +10,7 @@ namespace IconSDK.RPC
         [JsonProperty(PropertyName="jsonrpc")]
         public readonly string Version = "2.0";
 
-        [JsonProperty(PropertyName="id")]
+        [JsonProperty]
         public readonly object ID;
 
         public RPCMessage()
@@ -21,7 +21,7 @@ namespace IconSDK.RPC
 
     public class RPCRequestMessage : RPCMessage
     {
-        [JsonProperty(PropertyName="method")]
+        [JsonProperty]
         public readonly string Method;
 
         public RPCRequestMessage(string method) : base()
@@ -45,14 +45,10 @@ namespace IconSDK.RPC
     {
         public class RPCError
         {
-            [JsonProperty(PropertyName="code")]
             public readonly int Code;
-
-            [JsonProperty(PropertyName="message")]
             public readonly string Message;
         }
 
-        [JsonProperty(PropertyName="error")]
         public readonly RPCError Error;
 
         public bool IsSuccess
@@ -63,7 +59,7 @@ namespace IconSDK.RPC
 
     public class RPCResponseMessage<TResult> : RPCResponseMessage
     {
-        [JsonProperty(PropertyName="result")]
-        public readonly TResult result;
+        [JsonProperty]
+        public readonly TResult Result;
     }
 }

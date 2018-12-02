@@ -7,11 +7,13 @@ using Newtonsoft.Json;
 namespace IconSDK.RPC
 {
     using Types;
+    using Extensions;
+
     public class GetBalanceRequestMessage : RPCRequestMessage<GetBalanceRequestMessage.Parameter>
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="address")]
+            [JsonProperty]
             public readonly string Address;
 
             public Parameter(Address address)
@@ -43,7 +45,7 @@ namespace IconSDK.RPC
         {
             var request = new GetBalanceRequestMessage(address);
             var response = await Invoke(request);
-            return BigInteger.Parse(response.result.Replace("0x", "00"), NumberStyles.HexNumber);
+            return response.Result.ToBigInteger();
         }
     }
 }
