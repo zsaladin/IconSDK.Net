@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace IconSDK.Types
 {
-    public class Bytes
+    public class Bytes : IEquatable<Bytes>
     {
         #region ** static **
 
@@ -57,9 +57,8 @@ namespace IconSDK.Types
                 {
                     throw new FormatException($"'{hex}' does not start with '{Prefix}'");
                 }
+                hex = hex.Replace(Prefix, string.Empty);
             }
-
-            hex = hex.Replace(Prefix, string.Empty);
 
             var builder = ImmutableArray.CreateBuilder<byte>(hex.Length / 2);
             for (int i = 0; i < builder.Capacity; ++i)
@@ -102,22 +101,26 @@ namespace IconSDK.Types
             return Binary.Sum(item => item);
         }
 
+        public bool Equals(Bytes bytes)
+        {
+            if (bytes is null)
+                return false;
+
+            if (GetType() != bytes.GetType())
+                return false;
+
+            if (Binary.Length != bytes.Binary.Length)
+                return false;
+
+            return Enumerable.SequenceEqual(Binary, bytes.Binary);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is null)
                 return false;
 
-            return this == (obj as Bytes);
-        }
-
-        public static implicit operator byte[](Bytes bytes)
-        {
-            return bytes.Binary.ToArray();
-        }
-
-        public static implicit operator Bytes(string hex)
-        {
-            return new Bytes(hex);
+            return Equals(obj as Bytes);
         }
 
         public static bool operator ==(Bytes x, Bytes y)
@@ -128,15 +131,22 @@ namespace IconSDK.Types
             if (x is null || y is null)
                 return false;
 
-            if (x.Binary.Length != y.Binary.Length)
-                return false;
-
-            return Enumerable.SequenceEqual(x.Binary, y.Binary);
+            return x.Equals(y);
         }
 
         public static bool operator !=(Bytes x, Bytes y)
         {
             return !(x == y);
+        }
+
+        public static implicit operator byte[](Bytes bytes)
+        {
+            return bytes.Binary.ToArray();
+        }
+
+        public static implicit operator Bytes(string hex)
+        {
+            return new Bytes(hex);
         }
     }
 }
