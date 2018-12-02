@@ -45,13 +45,16 @@ namespace IconSDK.RPC
     {
         public class RPCError
         {
+            [JsonProperty]
             public readonly int Code;
+            [JsonProperty]
             public readonly string Message;
         }
 
+        [JsonProperty]
         public readonly RPCError Error;
 
-        public bool IsSuccess
+        public virtual bool IsSuccess
         {
             get { return Error == null; }
         }
@@ -61,5 +64,10 @@ namespace IconSDK.RPC
     {
         [JsonProperty]
         public readonly TResult Result;
+
+        public override bool IsSuccess
+        {
+            get { return base.IsSuccess && Result != null; }
+        }
     }
 }
