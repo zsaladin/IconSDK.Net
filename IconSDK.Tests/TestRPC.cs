@@ -28,11 +28,6 @@ namespace IconSDK.Tests
             var GetTransactionByHash = new GetTransactionByHash(Consts.ApiUrl.TestNet);
             var result = await GetTransactionByHash.Invoke("0x1dd7f6ec8f6de0b454c827d7f845fcc8056dd32f0ed1fecb37be860148081263");
 
-            var rs = new System.Numerics.BigInteger(-1).ToString("x");
-            rs = new System.Numerics.BigInteger(-1).ToHex0x();
-
-            var b = "-0x1".ToBigInteger();
-
             Assert.AreEqual(result.Version, "0x3");
             Assert.AreEqual(result.From, "hx889fd3476171ccaf650bdba0778ddafe7a5efc3e");
             Assert.AreEqual(result.To, "hx1589eda4474e6fb213ee0cd68e7768b3ded5bb34");
