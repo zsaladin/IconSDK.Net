@@ -51,6 +51,14 @@ namespace IconSDK.Types
 
         public Bytes(string hex)
         {
+            if (string.IsNullOrEmpty(Prefix) == false)
+            {
+                if (hex.StartsWith(Prefix) == false)
+                {
+                    throw new FormatException($"'{hex}' does not start with '{Prefix}'");
+                }
+            }
+
             hex = hex.Replace(Prefix, string.Empty);
 
             var builder = ImmutableArray.CreateBuilder<byte>(hex.Length / 2);
