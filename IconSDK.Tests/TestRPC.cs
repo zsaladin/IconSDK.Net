@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace IconSDK.Tests
 {
-    using RPC;
+    using RPCs;
     using Transaction;
     using Types;
     using Extensions;
@@ -13,10 +13,18 @@ namespace IconSDK.Tests
     public class TestRPC
     {
         [Test]
-        public async Task Test_GetBalance()
+        public async Task Test_GetBalance1()
         {
-            var GetBalance = new GetBalance(Consts.ApiUrl.TestNet);
-            var balance = await GetBalance.Invoke("hx0000000000000000000000000000000000000000");
+            var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
+            var balance = await getBalance.Invoke("hx0000000000000000000000000000000000000000");
+            Console.WriteLine($"Treasury : {balance.ToString()}");
+        }
+
+        [Test]
+        public async Task Test_GetBalance2()
+        {
+            var getBalance = GetBalance.Create(Consts.ApiUrl.TestNet);
+            var balance = await getBalance("hx0000000000000000000000000000000000000000");
             Console.WriteLine($"Treasury : {balance.ToString()}");
         }
 

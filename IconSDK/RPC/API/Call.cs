@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     public class CallRequestMessage : RPCRequestMessage<CallRequestMessage.Parameter>
@@ -54,6 +54,11 @@ namespace IconSDK.RPC
             var request = new CallRequestMessage(from, to, dataType, data);
             var response = await Invoke(request);
             return response.Result;
+        }
+
+        public static new Func<Address, Address, string, IDictionary<string, object>, Task<string>> Create(string url)
+        {
+            return new Call(url).Invoke;
         }
     }
 }

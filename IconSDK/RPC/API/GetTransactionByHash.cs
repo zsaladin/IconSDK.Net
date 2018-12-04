@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     public class GetTransactionByHashRequestMessage : RPCRequestMessage<GetTransactionByHashRequestMessage.Parameter>
@@ -76,6 +76,11 @@ namespace IconSDK.RPC
             var request = new GetTransactionByHashRequestMessage(hash);
             var response = await Invoke(request);
             return response.Result;
+        }
+
+        public static new Func<Hash32, Task<GetTransactionByHashResponseMessage.TransactionInfo>> Create(string url)
+        {
+            return new GetTransactionByHash(url).Invoke;
         }
     }
 }

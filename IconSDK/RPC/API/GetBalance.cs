@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     using Extensions;
@@ -46,6 +46,11 @@ namespace IconSDK.RPC
             var request = new GetBalanceRequestMessage(address);
             var response = await Invoke(request);
             return response.Result.ToBigInteger();
+        }
+
+        public static new Func<Address, Task<BigInteger>> Create(string url)
+        {
+            return new GetBalance(url).Invoke;
         }
     }
 }

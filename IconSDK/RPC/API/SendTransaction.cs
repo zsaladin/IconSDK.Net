@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     using Transaction;
@@ -37,6 +37,11 @@ namespace IconSDK.RPC
             var request = new SendTransactionRequestMessage(ts.Serialize(tx));
             var response = await Invoke(request);
             return response.Result;
+        }
+
+        public static new Func<Transaction, Task<Hash32>> Create(string url)
+        {
+            return new SendTransaction(url).Invoke;
         }
     }
 }

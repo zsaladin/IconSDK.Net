@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     public class RPCMessage
     {

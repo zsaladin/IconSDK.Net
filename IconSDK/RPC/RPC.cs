@@ -1,10 +1,11 @@
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Extensions;
 
@@ -17,6 +18,11 @@ namespace IconSDK.RPC
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
             Converters = new JsonConverter[] { new BigIntegerConverter() }
         };
+
+        public static Func<TRPCRequestMessage, Task<TRPCResponseMessage>> Create(string url)
+        {
+            return new RPC<TRPCRequestMessage, TRPCResponseMessage>(url).Invoke;
+        }
 
         public readonly string URL;
 

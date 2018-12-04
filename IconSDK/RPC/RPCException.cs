@@ -2,7 +2,7 @@ using System;
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     public class RPCException : Exception
     {

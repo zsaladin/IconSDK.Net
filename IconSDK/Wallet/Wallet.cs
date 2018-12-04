@@ -9,7 +9,7 @@ namespace IconSDK.Wallet
 {
     using Crypto;
     using Types;
-    using RPC;
+    using RPCs;
     using Transaction;
 
     public class Wallet
