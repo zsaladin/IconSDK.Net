@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace IconSDK.Tests
 {
     using RPCs;
-    using Transaction;
+    using Blockchain;
     using Types;
     using Extensions;
 

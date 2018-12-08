@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-namespace IconSDK.Transaction
+namespace IconSDK.Blockchain
 {
 	using Types;
 	using Extensions;

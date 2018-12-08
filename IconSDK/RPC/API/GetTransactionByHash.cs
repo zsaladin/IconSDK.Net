@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 namespace IconSDK.RPCs
 {
     using Types;
-    using Transaction;
+    using Blockchain;
     using Extensions;
     
     public class GetTransactionByHashRequestMessage : RPCRequestMessage<GetTransactionByHashRequestMessage.Parameter>
