@@ -126,6 +126,29 @@ namespace IconSDK.Tests
         }
 
         [Test]
+        public async Task Test_GetTransactionResult()
+        {
+            // Link : https://trackerdev.icon.foundation/transaction/0x380066add28d677954ac67596041ae6babdb405399fb37e070459fb2b92f60ce
+            var getTransactionResult = GetTransactionResult.Create(Consts.ApiUrl.TestNet);
+            var transactionResult = await getTransactionResult("0x380066add28d677954ac67596041ae6babdb405399fb37e070459fb2b92f60ce");
+
+            Assert.AreEqual(transactionResult.BlockHeight.ToHex0x(), "0x9104");
+            Assert.AreEqual(transactionResult.BlockHash.ToHex0x(), "0x96dd9702e443d7fd5f2cdb42dc9ac3398ca445e04085b2f7a8270b9f275e0bdd");
+            Assert.AreEqual(transactionResult.TxHash, "0x380066add28d677954ac67596041ae6babdb405399fb37e070459fb2b92f60ce");
+            Assert.AreEqual(transactionResult.TxIndex.ToHex0x(), "0x0");
+            Assert.AreEqual(transactionResult.LogsBloom, "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000400000000000040000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
+            Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x21cb4");
+            Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x21cb4");
+            Assert.AreEqual(transactionResult.To.ToString(), "cx0000000000000000000000000000000000000001");
+            Assert.AreEqual(transactionResult.Status.ToHex0x(), "0x1");
+            Assert.AreEqual(transactionResult.EventLogs[0].ScoreAddress, "cx0000000000000000000000000000000000000001");
+            Assert.AreEqual(transactionResult.EventLogs[0].Indexed[0], "AddImportWhiteListLog(str,int)");
+            Assert.AreEqual(transactionResult.EventLogs[0].Data[0], "[('struct', ['pack', 'unpack'])]");
+            Assert.AreEqual(transactionResult.EventLogs[0].Data[1], "0x1");
+        }
+
+        [Test]
         public void Test_RPCMethodNotFoundException()
         {
             var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
