@@ -117,6 +117,15 @@ namespace IconSDK.Tests
         }
 
         [Test]
+        public async Task Test_GetScoreApi()
+        {
+            var getScoreApi = new GetScoreApi(Consts.ApiUrl.TestNet);
+            var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
+
+            Assert.Greater(scoreApi.Length, 0);
+        }
+
+        [Test]
         public void Test_RPCMethodNotFoundException()
         {
             var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
