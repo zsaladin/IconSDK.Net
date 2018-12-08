@@ -108,6 +108,15 @@ namespace IconSDK.Tests
         }
 
         [Test]
+        public async Task Test_GetTotalSupply()
+        {
+            var getTotalSupply = new GetTotalSupply(Consts.ApiUrl.TestNet);
+            var totalSupply = await getTotalSupply.Invoke();
+
+            Assert.AreEqual(totalSupply.ToHex0x(), "0x2961fff8ca4a62327800000");
+        }
+
+        [Test]
         public void Test_RPCMethodNotFoundException()
         {
             var GetBalance = new GetBalance(Consts.ApiUrl.TestNet);
