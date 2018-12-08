@@ -34,8 +34,8 @@ namespace IconSDK.Tests
         {
             // Link : https://trackerdev.icon.foundation/transaction/0x1dd7f6ec8f6de0b454c827d7f845fcc8056dd32f0ed1fecb37be860148081263
 
-            var GetTransactionByHash = new GetTransactionByHash(Consts.ApiUrl.TestNet);
-            var result = await GetTransactionByHash.Invoke("0x1dd7f6ec8f6de0b454c827d7f845fcc8056dd32f0ed1fecb37be860148081263");
+            var getTransactionByHash = new GetTransactionByHash(Consts.ApiUrl.TestNet);
+            var result = await getTransactionByHash.Invoke("0x1dd7f6ec8f6de0b454c827d7f845fcc8056dd32f0ed1fecb37be860148081263");
 
             Assert.AreEqual(result.Transaction.Version, "0x3");
             Assert.AreEqual(result.Transaction.From, "hx889fd3476171ccaf650bdba0778ddafe7a5efc3e");
@@ -59,8 +59,8 @@ namespace IconSDK.Tests
         {
             // Link : https://trackerdev.icon.foundation/transaction/0x5aff7a465532e0262c9ca7d8ea783855675ad5ed1a4aa2e1b40c96291c84dd9c
 
-            var GetTransactionByHash = new GetTransactionByHash(Consts.ApiUrl.TestNet);
-            var result = await GetTransactionByHash.Invoke("0x5aff7a465532e0262c9ca7d8ea783855675ad5ed1a4aa2e1b40c96291c84dd9c");
+            var getTransactionByHash = new GetTransactionByHash(Consts.ApiUrl.TestNet);
+            var result = await getTransactionByHash.Invoke("0x5aff7a465532e0262c9ca7d8ea783855675ad5ed1a4aa2e1b40c96291c84dd9c");
 
             Assert.AreEqual(result.Transaction.Version, "0x3");
             Assert.AreEqual(result.Transaction.From, "hxcc345473807f9fa3c4d147433708e85bb106885b");
@@ -119,25 +119,25 @@ namespace IconSDK.Tests
         [Test]
         public void Test_RPCMethodNotFoundException()
         {
-            var GetBalance = new GetBalance(Consts.ApiUrl.TestNet);
+            var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
 
             GetBalanceRequestMessage requestMessage = new GetBalanceRequestMessage("hx0000000000000000000000000000000000000000");
             FieldInfo methodFieldInfo = typeof(GetBalanceRequestMessage).GetField("Method");
             methodFieldInfo.SetValue(requestMessage, "icx_GetBalance");  // 'icx_getBalance' is correct
 
-            Assert.ThrowsAsync(typeof(RPCMethodNotFoundException), async () => await GetBalance.Invoke(requestMessage));
+            Assert.ThrowsAsync(typeof(RPCMethodNotFoundException), async () => await getBalance.Invoke(requestMessage));
         }
 
         [Test]
         public void Test_RPCInvalidParamsException()
         {
-            var GetBalance = new GetBalance(Consts.ApiUrl.TestNet);
+            var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
 
             GetBalanceRequestMessage requestMessage = new GetBalanceRequestMessage("hx0000000000000000000000000000000000000000");
             FieldInfo addressFieldInfo = requestMessage.Parameters.GetType().GetField("Address");
             addressFieldInfo.SetValue(requestMessage.Parameters, "hxz000000000000000000000000000000000000000");  // 'hx0000000000000000000000000000000000000000' is correct
 
-            Assert.ThrowsAsync(typeof(RPCInvalidParamsException), async () => await GetBalance.Invoke(requestMessage));
+            Assert.ThrowsAsync(typeof(RPCInvalidParamsException), async () => await getBalance.Invoke(requestMessage));
         }
 
         [Test]
@@ -152,8 +152,8 @@ namespace IconSDK.Tests
 
             var tx = txBuilder.Build();
 
-            var SendTransactin = new SendTransaction(Consts.ApiUrl.TestNet);
-            Assert.ThrowsAsync(typeof(RPCInvalidRequestException), async () => await SendTransactin.Invoke(tx));
+            var gendTransactin = new SendTransaction(Consts.ApiUrl.TestNet);
+            Assert.ThrowsAsync(typeof(RPCInvalidRequestException), async () => await gendTransactin.Invoke(tx));
         }
     }
 }
