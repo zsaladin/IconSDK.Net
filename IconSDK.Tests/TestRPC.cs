@@ -87,6 +87,27 @@ namespace IconSDK.Tests
         }
 
         [Test]
+        public async Task Test_GetLastBlock()
+        {
+            var getLastBlock = GetLastBlock.Create(Consts.ApiUrl.TestNet);
+            var lastBlock = await getLastBlock();
+
+            var getBlockByHeight = GetBlockByHeight.Create(Consts.ApiUrl.TestNet);
+            var blockByHeight = await getBlockByHeight(lastBlock.Height.Value);
+
+            Assert.AreEqual(lastBlock.Height, blockByHeight.Height);
+            Assert.AreEqual(lastBlock.Hash, blockByHeight.Hash);
+            Assert.AreEqual(lastBlock.Signature, blockByHeight.Signature);
+
+            var getBlockByHash = GetBlockByHash.Create(Consts.ApiUrl.TestNet);
+            var blockByHash = await getBlockByHash(lastBlock.Hash);
+
+            Assert.AreEqual(lastBlock.Height, blockByHash.Height);
+            Assert.AreEqual(lastBlock.Hash, blockByHash.Hash);
+            Assert.AreEqual(lastBlock.Signature, blockByHash.Signature);
+        }
+
+        [Test]
         public void Test_RPCMethodNotFoundException()
         {
             var GetBalance = new GetBalance(Consts.ApiUrl.TestNet);
