@@ -4,14 +4,16 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
+    using Extensions;
+
     public class GetBalanceRequestMessage : RPCRequestMessage<GetBalanceRequestMessage.Parameter>
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="address")]
+            [JsonProperty]
             public readonly string Address;
 
             public Parameter(Address address)
@@ -43,10 +45,12 @@ namespace IconSDK.RPC
         {
             var request = new GetBalanceRequestMessage(address);
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return BigInteger.Parse(response.result.Replace("0x", "00"), NumberStyles.HexNumber);
+            return response.Result.ToBigInteger();
+        }
 
-            throw new Exception(response.Error.Message);
+        public static new Func<Address, Task<BigInteger>> Create(string url)
+        {
+            return new GetBalance(url).Invoke;
         }
     }
 }

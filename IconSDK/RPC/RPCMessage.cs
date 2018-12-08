@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     public class RPCMessage
     {
@@ -10,7 +10,7 @@ namespace IconSDK.RPC
         [JsonProperty(PropertyName="jsonrpc")]
         public readonly string Version = "2.0";
 
-        [JsonProperty(PropertyName="id")]
+        [JsonProperty]
         public readonly object ID;
 
         public RPCMessage()
@@ -21,7 +21,7 @@ namespace IconSDK.RPC
 
     public class RPCRequestMessage : RPCMessage
     {
-        [JsonProperty(PropertyName="method")]
+        [JsonProperty]
         public readonly string Method;
 
         public RPCRequestMessage(string method) : base()
@@ -45,17 +45,16 @@ namespace IconSDK.RPC
     {
         public class RPCError
         {
-            [JsonProperty(PropertyName="code")]
+            [JsonProperty]
             public readonly int Code;
-
-            [JsonProperty(PropertyName="message")]
+            [JsonProperty]
             public readonly string Message;
         }
 
-        [JsonProperty(PropertyName="error")]
+        [JsonProperty]
         public readonly RPCError Error;
 
-        public bool IsSuccess
+        public virtual bool IsSuccess
         {
             get { return Error == null; }
         }
@@ -63,7 +62,12 @@ namespace IconSDK.RPC
 
     public class RPCResponseMessage<TResult> : RPCResponseMessage
     {
-        [JsonProperty(PropertyName="result")]
-        public readonly TResult result;
+        [JsonProperty]
+        public readonly TResult Result;
+
+        public override bool IsSuccess
+        {
+            get { return base.IsSuccess && Result != null; }
+        }
     }
 }

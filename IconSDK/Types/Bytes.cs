@@ -8,12 +8,38 @@ using System.Threading.Tasks;
 
 namespace IconSDK.Types
 {
-    public class Bytes
+    public class Bytes : IEquatable<Bytes>
     {
+        #region ** static **
+
+        static Dictionary<Type, int> _sizes = new Dictionary<Type, int>
+        {
+            [typeof(Bytes)] = 0,
+            [typeof(ExternalAddress)] = 20,
+            [typeof(ContractAddress)] = 20,
+            [typeof(Hash32)] = 32,
+            [typeof(PrivateKey)] = 32,
+            [typeof(PublicKey)] = 65,
+            [typeof(Signature)] = 65,
+        };
+
+        static Dictionary<Type, string> _prefixes = new Dictionary<Type, string>
+        {
+            [typeof(Bytes)] = string.Empty,
+            [typeof(ExternalAddress)] = "hx",
+            [typeof(ContractAddress)] = "cx",
+            [typeof(Hash32)] = "0x",
+            [typeof(PrivateKey)] = string.Empty,
+            [typeof(PublicKey)] = string.Empty,
+            [typeof(Signature)] = string.Empty
+        };
+
+        #endregion
+
         public readonly ImmutableArray<byte> Binary;
 
-        public virtual uint Size => 0;
-        public virtual string Prefix => string.Empty;
+        public int Size => _sizes[this.GetType()];
+        public string Prefix => _prefixes[this.GetType()];
 
         public Bytes(IEnumerable<byte> bytes)
         {
@@ -25,7 +51,14 @@ namespace IconSDK.Types
 
         public Bytes(string hex)
         {
-            hex = hex.Replace(Prefix, string.Empty);
+            if (string.IsNullOrEmpty(Prefix) == false)
+            {
+                if (hex.StartsWith(Prefix) == false)
+                {
+                    throw new FormatException($"'{hex}' does not start with '{Prefix}'");
+                }
+                hex = hex.Replace(Prefix, string.Empty);
+            }
 
             var builder = ImmutableArray.CreateBuilder<byte>(hex.Length / 2);
             for (int i = 0; i < builder.Capacity; ++i)
@@ -68,22 +101,26 @@ namespace IconSDK.Types
             return Binary.Sum(item => item);
         }
 
+        public bool Equals(Bytes bytes)
+        {
+            if (bytes is null)
+                return false;
+
+            if (GetType() != bytes.GetType())
+                return false;
+
+            if (Binary.Length != bytes.Binary.Length)
+                return false;
+
+            return Enumerable.SequenceEqual(Binary, bytes.Binary);
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is null)
                 return false;
 
-            return this == (obj as Bytes);
-        }
-
-        public static implicit operator byte[](Bytes bytes)
-        {
-            return bytes.Binary.ToArray();
-        }
-
-        public static implicit operator Bytes(string hex)
-        {
-            return new Bytes(hex);
+            return Equals(obj as Bytes);
         }
 
         public static bool operator ==(Bytes x, Bytes y)
@@ -94,15 +131,22 @@ namespace IconSDK.Types
             if (x is null || y is null)
                 return false;
 
-            if (x.Binary.Length != y.Binary.Length)
-                return false;
-
-            return Enumerable.SequenceEqual(x.Binary, y.Binary);
+            return x.Equals(y);
         }
 
         public static bool operator !=(Bytes x, Bytes y)
         {
             return !(x == y);
+        }
+
+        public static implicit operator byte[](Bytes bytes)
+        {
+            return bytes.Binary.ToArray();
+        }
+
+        public static implicit operator Bytes(string hex)
+        {
+            return new Bytes(hex);
         }
     }
 }

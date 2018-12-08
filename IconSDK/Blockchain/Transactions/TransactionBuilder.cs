@@ -5,7 +5,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IconSDK.Transaction
+namespace IconSDK.Blockchain
 {
     using Crypto;
     using Types;

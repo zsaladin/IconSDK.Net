@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IconSDK.Transaction
+namespace IconSDK.Blockchain
 {
     using Types;
 

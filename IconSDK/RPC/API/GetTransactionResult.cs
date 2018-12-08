@@ -4,14 +4,14 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     public class GetTransactionResultRequestMessage : RPCRequestMessage<GetTransactionResultRequestMessage.Parameter>
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="txHash")]
+            [JsonProperty]
             public readonly string TxHash;
 
             public Parameter(Hash32 hash)
@@ -27,9 +27,43 @@ namespace IconSDK.RPC
         }
     }
 
-    public class GetTransactionResultResponseMessage : RPCResponseMessage<object>
+    public class GetTransactionResultResponseMessage : RPCResponseMessage<GetTransactionResultResponseMessage.Receipt>
     {
+        public class Receipt
+        {
+            [JsonProperty]
+            public readonly Hash32 BlockHash;
+            [JsonProperty]
+            public readonly BigInteger BlockHeight;
+            [JsonProperty]
+            public readonly Hash32 TxHash;
+            [JsonProperty]
+            public readonly BigInteger TxIndex;
+            [JsonProperty]
+            public readonly Address To;
+            [JsonProperty]
+            public readonly BigInteger StepUsed;
+            [JsonProperty]
+            public readonly BigInteger StepPrice;
+            [JsonProperty]
+            public readonly BigInteger CumulativeStepUsed;
+            [JsonProperty]
+            public readonly EventLog[] EventLogs;
+            [JsonProperty]
+            public readonly string LogsBloom;
+            [JsonProperty]
+            public readonly BigInteger Status;
+        }
 
+        public class EventLog
+        {
+            [JsonProperty]
+            public readonly ContractAddress ScoreAddress;
+            [JsonProperty]
+            public readonly string[] Indexed;
+            [JsonProperty]
+            public readonly string[] Data;
+        }
     }
 
     public class GetTransactionResult : RPC<GetTransactionResultRequestMessage, GetTransactionResultResponseMessage>
@@ -39,11 +73,16 @@ namespace IconSDK.RPC
 
         }
 
-        public async Task<bool> Invoke(Hash32 hash)
+        public async Task<GetTransactionResultResponseMessage.Receipt> Invoke(Hash32 hash)
         {
             var request = new GetTransactionResultRequestMessage(hash);
             var response = await Invoke(request);
-            return response.IsSuccess;
+            return response.Result;
+        }
+
+        public static new Func<Hash32, Task<GetTransactionResultResponseMessage.Receipt>> Create(string url)
+        {
+            return new GetTransactionResult(url).Invoke;
         }
     }
 }

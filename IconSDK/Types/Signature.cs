@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace IconSDK.Types
 {
-    public class Signature : Bytes
+    public class Signature : Bytes, IEquatable<Signature>
     {
-        public override uint Size => 65;
-
         public Signature(IEnumerable<byte> bytes)
             : base(bytes)
         {
@@ -27,9 +25,40 @@ namespace IconSDK.Types
             return Convert.ToBase64String(Binary.ToArray());
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public bool Equals(Signature signature)
+        {
+            return base.Equals(signature);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Signature signature)
+                return Equals(signature);
+
+            if (obj is string hex)
+                return Equals(hex);
+
+            return false;
+        }
+
         public static implicit operator Signature(string base64)
         {
             return new Signature(base64);
+        }
+
+        public static bool operator ==(Signature x, Signature y)
+        {
+            return (Bytes)x == (Bytes)y;
+        }
+
+        public static bool operator !=(Signature x, Signature y)
+        {
+            return !(x == y);
         }
     }
 }

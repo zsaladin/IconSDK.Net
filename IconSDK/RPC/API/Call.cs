@@ -5,23 +5,20 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
     public class CallRequestMessage : RPCRequestMessage<CallRequestMessage.Parameter>
     {
         public class Parameter
         {
-            [JsonProperty(PropertyName="from")]
+            [JsonProperty]
             public readonly string From;
-
-            [JsonProperty(PropertyName="to")]
+            [JsonProperty]
             public readonly string To;
-
-            [JsonProperty(PropertyName="dataType")]
+            [JsonProperty]
             public readonly string DataType;
-
-            [JsonProperty(PropertyName="data")]
+            [JsonProperty]
             public readonly IDictionary<string, object> Data;
 
             public Parameter(Address from, Address to, string dataType, IDictionary<string, object> data)
@@ -34,7 +31,7 @@ namespace IconSDK.RPC
         }
 
         public CallRequestMessage(Address from, Address to, string dataType, IDictionary<string, object> data)
-        : base("icx_call", new Parameter(from , to, dataType, data))
+        : base("icx_call", new Parameter(from, to, dataType, data))
         {
 
         }
@@ -56,10 +53,12 @@ namespace IconSDK.RPC
         {
             var request = new CallRequestMessage(from, to, dataType, data);
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return response.result;
+            return response.Result;
+        }
 
-            throw new Exception(response.Error.Message);
+        public static new Func<Address, Address, string, IDictionary<string, object>, Task<string>> Create(string url)
+        {
+            return new Call(url).Invoke;
         }
     }
 }

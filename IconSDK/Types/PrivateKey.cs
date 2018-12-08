@@ -7,10 +7,8 @@ using System.Security.Cryptography;
 
 namespace IconSDK.Types
 {
-    public class PrivateKey : Bytes
+    public class PrivateKey : Bytes, IEquatable<PrivateKey>
     {
-        public override uint Size => 32;
-
         public PrivateKey(IEnumerable<byte> bytes)
             : base(bytes)
         {
@@ -39,9 +37,40 @@ namespace IconSDK.Types
             return new PrivateKey(bytes);
         }
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public bool Equals(PrivateKey privateKey)
+        {
+            return base.Equals(privateKey);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is PrivateKey privateKey)
+                return Equals(privateKey);
+
+            if (obj is string hex)
+                return Equals(hex);
+
+            return false;
+        }
+
         public static implicit operator PrivateKey(string hex)
         {
             return new PrivateKey(hex);
+        }
+
+        public static bool operator ==(PrivateKey x, PrivateKey y)
+        {
+            return (Bytes)x == (Bytes)y;
+        }
+
+        public static bool operator !=(PrivateKey x, PrivateKey y)
+        {
+            return !(x == y);
         }
     }
 }

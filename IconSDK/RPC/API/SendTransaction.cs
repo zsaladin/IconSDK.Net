@@ -5,10 +5,10 @@ using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
 
-namespace IconSDK.RPC
+namespace IconSDK.RPCs
 {
     using Types;
-    using Transaction;
+    using Blockchain;
 
     public class SendTransactionRequestMessage : RPCRequestMessage<IDictionary<string, object>>
     {
@@ -19,7 +19,7 @@ namespace IconSDK.RPC
         }
     }
 
-    public class SendTransactionResponseMessage : RPCResponseMessage<string>
+    public class SendTransactionResponseMessage : RPCResponseMessage<Hash32>
     {
 
     }
@@ -36,10 +36,12 @@ namespace IconSDK.RPC
             var ts = new TransactionSerializer();
             var request = new SendTransactionRequestMessage(ts.Serialize(tx));
             var response = await Invoke(request);
-            if (response.IsSuccess)
-                return new Hash32(response.result);
+            return response.Result;
+        }
 
-            throw new Exception(response.Error.Message);
+        public static new Func<Transaction, Task<Hash32>> Create(string url)
+        {
+            return new SendTransaction(url).Invoke;
         }
     }
 }
