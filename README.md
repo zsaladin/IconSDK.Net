@@ -38,13 +38,21 @@ var getBalance = new GetBalance(Consts.Api.TestNet);
 var balance = await getBalance.Invoke("hx0000000000000000000000000000000000000000");
 ```
 
+It supports various RPCs in ICON JSON-RPC v3.
 ```C#
+// GetLastBlock
 var getLastBlock = GetLastBlock.Create(Consts.ApiUrl.TestNet);
 var block = await getLastBlock();
 
-var getScoreApi = new GetScoreApi(Consts.Api.Url.TestNet);
-var scoreApi = await getScoreApi("cx0000000000000000000000000000000000000001");
+// GetTotalSupply
+var getTotalSupply = new GetTotalSupply(Consts.ApiUrl.TestNet);
+var totalSupply = await getTotalSupply.Invoke();
 
+// GetScoreApi
+var getScoreApi = new GetScoreApi(Consts.Api.Url.TestNet);
+var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
+
+// SendTransaction
 var txBuilder = new TransactionBuilder();
 txBuilder.PrivateKey = PrivateKey.Random();  // Your private key
 txBuilder.To = "hx0000000000000000000000000000000000000000";
@@ -52,8 +60,10 @@ txBuilder.Value = 10 * Consts.Loop2ICX;
 txBuilder.StepLimit = 1 * Consts.Loop2ICX;;
 txBuilder.NID = 2;
 var tx = txBuilder.Build();
-var sendTransaction = SendTransaction.Create(Consts.ApiUrl.TestNet);
-var txHash = await sendTransaction(tx); // It will raise exception if your address does not have ICX enough.
+var sendTransaction = new SendTransaction(Consts.ApiUrl.TestNet);
+
+// It will raise an exception if your address does not have ICX enough.
+var txHash = await sendTransaction.Invoke(tx);
 ```
 
 
