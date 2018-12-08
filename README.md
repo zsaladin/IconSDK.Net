@@ -17,6 +17,16 @@ wallet.Store("yourPassword", "yourKeystorePath");
 ```
 
 ## Installation
+
+### Referencing this project as a library.
+```Shell
+$ git clone https://github.com/zsaladin/IconSDK.Net
+$ mkdir myproject
+$ cd myproject
+$ dotnet new console
+$ dotnet add reference ../IconSDK.Net/IconSDK/IconSDK.csproj
+```
+### Getting DLL files
 ```Shell
 $ git clone https://github.com/zsaladin/IconSDK.Net
 $ cd IconSDK.Net
@@ -24,7 +34,6 @@ $ dotnet restore
 $ dotnet test IconSDK.Tests
 $ dotnet publish --configuration Release
 ```
-You will get DLL files. (./IconSDK/bin/Release/netstandard2.0/publish). They have to be referenced from your application.
 
 ## RPC
 There are two methods to do it.
