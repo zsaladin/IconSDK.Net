@@ -19,7 +19,7 @@ namespace IconSDK.RPCs
         }
     }
 
-    public class SendTransactionResponseMessage : RPCResponseMessage<string>
+    public class SendTransactionResponseMessage : RPCResponseMessage<Hash32>
     {
 
     }
