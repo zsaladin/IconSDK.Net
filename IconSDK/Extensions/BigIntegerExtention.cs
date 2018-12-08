@@ -53,18 +53,4 @@ namespace IconSDK.Extensions
             return isNegative ? -result : result;
         }
     }
-
-    public class BigIntegerConverter : JsonConverter<BigInteger>
-    {
-        public override BigInteger ReadJson(JsonReader reader, Type objectType, BigInteger existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            string s = (string)reader.Value;
-            return s.ToBigInteger();
-        }
-
-        public override void WriteJson(JsonWriter writer, BigInteger value, JsonSerializer serializer)
-        {
-            writer.WriteValue(value.ToHex0x());
-        }
-    }
 }

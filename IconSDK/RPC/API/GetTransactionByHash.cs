@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
 using Newtonsoft.Json;
@@ -40,25 +41,29 @@ namespace IconSDK.RPCs
             [JsonProperty]
             public readonly Address To;
             [JsonProperty]
-            public readonly BigInteger Value;
+            public readonly BigInteger? Value;
             [JsonProperty]
-            public readonly BigInteger Fee;
+            public readonly BigInteger? Fee;
             [JsonProperty]
-            public readonly BigInteger StepLimit;
+            public readonly BigInteger? StepLimit;
             [JsonProperty]
-            public readonly BigInteger Timestamp;
+            public readonly BigInteger? Timestamp;
             [JsonProperty]
-            public readonly BigInteger NID;
+            public readonly BigInteger? NID;
             [JsonProperty]
-            public readonly BigInteger Nonce;
+            public readonly BigInteger? Nonce;
+            [JsonProperty]
+            public readonly string DataType;
+            [JsonProperty]
+            public readonly Dictionary<string, object> Data;
             [JsonProperty]
             public readonly Signature Signature;
             [JsonProperty]
             public readonly Hash32 TxHash;
             [JsonProperty]
-            public readonly BigInteger TxIndex;
+            public readonly BigInteger? TxIndex;
             [JsonProperty]
-            public readonly BigInteger BlockHeight;
+            public readonly BigInteger? BlockHeight;
             [JsonProperty]
             public readonly Hash32 BlockHash;
         }

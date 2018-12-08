@@ -16,7 +16,11 @@ namespace IconSDK.RPCs
         private static JsonSerializerSettings _settings = new JsonSerializerSettings()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            Converters = new JsonConverter[] { new BigIntegerConverter() }
+            Converters = new JsonConverter[]
+            {
+                new BigIntegerConverter(),
+                new DictionaryConverter()
+            }
         };
 
         public static Func<TRPCRequestMessage, Task<TRPCResponseMessage>> Create(string url)
