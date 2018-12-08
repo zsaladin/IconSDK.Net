@@ -8,6 +8,9 @@ using Newtonsoft.Json;
 namespace IconSDK.RPCs
 {
     using Types;
+    using Transaction;
+    using Extensions;
+    
     public class GetTransactionByHashRequestMessage : RPCRequestMessage<GetTransactionByHashRequestMessage.Parameter>
     {
         public class Parameter
@@ -28,44 +31,22 @@ namespace IconSDK.RPCs
         }
     }
 
-    public class GetTransactionByHashResponseMessage : RPCResponseMessage<GetTransactionByHashResponseMessage.TransactionInfo>
+    public class GetTransactionByHashResponseMessage : RPCResponseMessage<Dictionary<string, object>>
     {
         public class TransactionInfo
         {
-            [JsonProperty]
-            public readonly string Version;
-            [JsonProperty]
-            public readonly string Method;
-            [JsonProperty]
-            public readonly Address From;
-            [JsonProperty]
-            public readonly Address To;
-            [JsonProperty]
-            public readonly BigInteger? Value;
-            [JsonProperty]
-            public readonly BigInteger? Fee;
-            [JsonProperty]
-            public readonly BigInteger? StepLimit;
-            [JsonProperty]
-            public readonly BigInteger? Timestamp;
-            [JsonProperty]
-            public readonly BigInteger? NID;
-            [JsonProperty]
-            public readonly BigInteger? Nonce;
-            [JsonProperty]
-            public readonly string DataType;
-            [JsonProperty]
-            public readonly Dictionary<string, object> Data;
-            [JsonProperty]
-            public readonly Signature Signature;
-            [JsonProperty]
-            public readonly Hash32 TxHash;
-            [JsonProperty]
-            public readonly BigInteger? TxIndex;
-            [JsonProperty]
-            public readonly BigInteger? BlockHeight;
-            [JsonProperty]
+            public readonly Transaction Transaction;
+            public readonly BigInteger TxIndex;
+            public readonly BigInteger BlockHeight;
             public readonly Hash32 BlockHash;
+
+            public TransactionInfo(Transaction transaction, BigInteger txIndex, BigInteger blockHeight, Hash32 blockHash)
+            {
+                Transaction = transaction;
+                TxIndex = txIndex;
+                BlockHeight = blockHeight;
+                BlockHash = blockHash;
+            }
         }
     }
 
@@ -80,7 +61,13 @@ namespace IconSDK.RPCs
         {
             var request = new GetTransactionByHashRequestMessage(hash);
             var response = await Invoke(request);
-            return response.Result;
+            var tx = new TransactionSerializer().Deserialize(response.Result);
+            return new GetTransactionByHashResponseMessage.TransactionInfo(
+                tx,
+                ((string)response.Result["txIndex"]).ToBigInteger(),
+                ((string)response.Result["blockHeight"]).ToBigInteger(),
+                (string)response.Result["blockHash"]
+            );
         }
 
         public static new Func<Hash32, Task<GetTransactionByHashResponseMessage.TransactionInfo>> Create(string url)
