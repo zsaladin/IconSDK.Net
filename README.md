@@ -26,6 +26,9 @@ wallet.ApiUrl = Consts.ApiUrl.MainNet;
 
 // Store your key with password.
 wallet.Store("yourPassword", "yourKeystorePath");
+
+// Load your wallet from keystore.
+wallet = Wallet.Load("yourPassword", "yourKeystorePath");
 ```
 
 ## Installation
@@ -55,6 +58,10 @@ using IconSDK.RPCs;
 // First
 var getBalance = GetBalance.Create(Consts.ApiUrl.TestNet);
 var balance = await getBalance("hx0000000000000000000000000000000000000000");
+```
+
+```C#
+using IconSDK.RPCs;
 
 // Second
 var getBalance = new GetBalance(Consts.Api.TestNet);
