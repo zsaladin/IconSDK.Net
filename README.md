@@ -68,7 +68,17 @@ var getBalance = new GetBalance(Consts.Api.TestNet);
 var balance = await getBalance.Invoke("hx0000000000000000000000000000000000000000");
 ```
 
-It supports various RPCs in ICON JSON-RPC v3.
+#### Support
+- icx_getLastBlock
+- icx_getBlockByHeight
+- icx_getBlockByHash
+- icx_call
+- icx_getBalance
+- icx_getScoreApi
+- icx_getTotalSupply
+- icx_getTransactionResult
+- icx_getTransactionByHash
+- icx_sendTransaction
 ```C#
 using IconSDK.RPCs;
 
@@ -98,7 +108,6 @@ var sendTransaction = new SendTransaction(Consts.ApiUrl.TestNet);
 var txHash = await sendTransaction.Invoke(tx);
 ```
 
-
 ## Requirements
 - [dotnet core](https://docs.microsoft.com/dotnet/core/)
   - [System.Collections.Immutable](https://www.nuget.org/packages/System.Collections.Immutable)
@@ -108,5 +117,7 @@ var txHash = await sendTransaction.Invoke(tx);
 ### TODO
 - Nuget
 - Unity Asset store
+- RPC Call Improvement
+- Transaction Improvement(Deploy, Call, Message)
 - Sync RPC
 - Query v2 tx
