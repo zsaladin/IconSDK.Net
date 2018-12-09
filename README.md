@@ -4,6 +4,8 @@ ICON SDK for .Net supports to communicate ICON network. It will help you integra
 
 ## Quick start
 ```C#
+using IconSDK.Wallet;
+
 // Create new wallet.
 // It will have random private key if you do not privide.
 var wallet = Wallet.Create();
@@ -38,6 +40,8 @@ $ dotnet publish --configuration Release
 ## RPC
 There are two methods to do it.
 ```C#
+using IconSDK.RPCs;
+
 // First
 var getBalance = GetBalance.Create(Consts.ApiUrl.TestNet);
 var balance = await getBalance("hx0000000000000000000000000000000000000000");
@@ -49,6 +53,8 @@ var balance = await getBalance.Invoke("hx000000000000000000000000000000000000000
 
 It supports various RPCs in ICON JSON-RPC v3.
 ```C#
+using IconSDK.RPCs;
+
 // GetLastBlock
 var getLastBlock = GetLastBlock.Create(Consts.ApiUrl.TestNet);
 var block = await getLastBlock();
