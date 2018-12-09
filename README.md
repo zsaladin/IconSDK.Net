@@ -14,7 +14,17 @@ var wallet = Wallet.Create();
 // It will retrieve the value from Testnet if you do not specify network.
 var balance = await wallet.GetBalance();
 
-// Store your key with password
+// Transfer ICX
+// It will transfer the value in Testnet if you do not specify network.
+Address to = "hx0000000000000000000000000000000000000000";
+BigInteger amount = 10 * Consts.Loop2ICX;
+BigInteger stepLimit = 1 * Consts.Loop2ICX;
+await wallet.Transfer(to, amount, stepLimit);
+
+// Specify network.
+wallet.ApiUrl = Consts.ApiUrl.MainNet;
+
+// Store your key with password.
 wallet.Store("yourPassword", "yourKeystorePath");
 ```
 
