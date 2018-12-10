@@ -4,7 +4,7 @@ ICON SDK for .Net supports to communicate ICON network. It will help you integra
 
 ## Quick start
 ```C#
-using IconSDK.Wallet;
+using IconSDK.Account;
 
 // Create new wallet.
 // It will have random private key if you do not privide.
