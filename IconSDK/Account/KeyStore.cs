@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Nethereum.KeyStore;
 
-namespace IconSDK.Wallet
+namespace IconSDK.Account
 {
     using Types;
 

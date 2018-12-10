@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace IconSDK.Tests
 {
-    using Wallet;
+    using Account;
     using Types;
     using Crypto;
 
