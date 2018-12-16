@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Numerics;
 using NUnit.Framework;
+using Newtonsoft.Json;
 
 namespace IconSDK.Tests
 {
@@ -10,6 +12,7 @@ namespace IconSDK.Tests
     using Blockchain;
     using Types;
     using Extensions;
+    using Crypto;
 
     public class TestRPC
     {
@@ -149,6 +152,61 @@ namespace IconSDK.Tests
         }
 
         [Test]
+        public async Task Test_Call()
+        {
+            var privateKey = PrivateKey.Random();
+            var address = Addresser.Create(privateKey);
+
+            var call = new Call<bool>(Consts.ApiUrl.TestNet);
+            var result = await call.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                ("address", address)
+             );
+
+            Console.WriteLine(result);
+
+            var call1 = new Call<IsDeployerRequestParam, bool>(Consts.ApiUrl.TestNet);
+            var result1 = await call1.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                new IsDeployerRequestParam() { Address = address }
+             );
+
+            Console.WriteLine(result1);
+
+            var call2 = new Call<BigInteger>(Consts.ApiUrl.TestNet);
+            var result2 = await call2.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getStepPrice"
+            );
+
+            Console.WriteLine(result2);
+
+            var call3 = new Call<GetRevisionResponseParam>(Consts.ApiUrl.TestNet);
+            var result3 = await call3.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getRevision"
+            );
+
+            Console.WriteLine(result3.Code);
+            Console.WriteLine(result3.Name);
+
+            var call4 = new Call<Dictionary<string, BigInteger>>(Consts.ApiUrl.TestNet);
+            var result4 = await call4.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getStepCosts"
+            );
+
+            Console.WriteLine(JsonConvert.SerializeObject(result4));
+        }
+
+        [Test]
         public void Test_RPCMethodNotFoundException()
         {
             var getBalance = new GetBalance(Consts.ApiUrl.TestNet);
@@ -186,6 +244,17 @@ namespace IconSDK.Tests
 
             var gendTransactin = new SendTransaction(Consts.ApiUrl.TestNet);
             Assert.ThrowsAsync(typeof(RPCInvalidRequestException), async () => await gendTransactin.Invoke(tx));
+        }
+
+        class IsDeployerRequestParam
+        {
+            public Address Address;
+        }
+
+        class GetRevisionResponseParam
+        {
+            public BigInteger Code;
+            public string Name;
         }
     }
 }

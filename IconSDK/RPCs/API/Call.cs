@@ -3,62 +3,43 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace IconSDK.RPCs
 {
     using Types;
-    public class CallRequestMessage : RPCRequestMessage<CallRequestMessage.Parameter>
+    public class CallRequestMessage : CallRequestMessage<IDictionary<string, object>>
     {
-        public class Parameter
-        {
-            [JsonProperty]
-            public readonly string From;
-            [JsonProperty]
-            public readonly string To;
-            [JsonProperty]
-            public readonly string DataType;
-            [JsonProperty]
-            public readonly IDictionary<string, object> Data;
-
-            public Parameter(Address from, Address to, string dataType, IDictionary<string, object> data)
-            {
-                From = from.ToString();
-                To = to.ToString();
-                DataType = dataType;
-                Data = data;
-            }
-        }
-
-        public CallRequestMessage(Address from, Address to, string dataType, IDictionary<string, object> data)
-        : base("icx_call", new Parameter(from, to, dataType, data))
+        public CallRequestMessage(Address from, Address to, string method, IDictionary<string, object> param)
+        : base(from, to, method, param)
         {
 
         }
     }
 
-    public class CallResponseMessage : RPCResponseMessage<string>
-    {
-
-    }
-
-    public class Call : RPC<CallRequestMessage, CallResponseMessage>
+    public class Call<TResponseParam> : RPC<CallRequestMessage, CallResponseMessage<TResponseParam>>
     {
         public Call(string url) : base(url)
         {
 
         }
 
-        public async Task<string> Invoke(Address from, Address to, string dataType, IDictionary<string, object> data)
+        public async Task<TResponseParam> Invoke(Address from, Address to, string method, IDictionary<string, object> param)
         {
-            var request = new CallRequestMessage(from, to, dataType, data);
+            var request = new CallRequestMessage(from, to, method, param);
             var response = await Invoke(request);
             return response.Result;
         }
 
-        public static new Func<Address, Address, string, IDictionary<string, object>, Task<string>> Create(string url)
+        public async Task<TResponseParam> Invoke(Address from, Address to, string method, params ValueTuple<string, object>[] param)
         {
-            return new Call(url).Invoke;
+            return await Invoke(from, to, method, param.ToDictionary(tuple => tuple.Item1, tuple => tuple.Item2));
+        }
+
+        public static new Func<Address, Address, string, IDictionary<string, object>, Task<TResponseParam>> Create(string url)
+        {
+            return new Call<TResponseParam>(url).Invoke;
         }
     }
 }

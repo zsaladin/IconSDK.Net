@@ -12,7 +12,7 @@ namespace IconSDK.Types
     {
         #region ** static **
 
-        static Dictionary<Type, int> _sizes = new Dictionary<Type, int>
+        public static Dictionary<Type, int> Sizes = new Dictionary<Type, int>
         {
             [typeof(Bytes)] = 0,
             [typeof(ExternalAddress)] = 20,
@@ -23,9 +23,9 @@ namespace IconSDK.Types
             [typeof(Signature)] = 65,
         };
 
-        static Dictionary<Type, string> _prefixes = new Dictionary<Type, string>
+        public static Dictionary<Type, string> Prefixes = new Dictionary<Type, string>
         {
-            [typeof(Bytes)] = string.Empty,
+            [typeof(Bytes)] = "0x",
             [typeof(ExternalAddress)] = "hx",
             [typeof(ContractAddress)] = "cx",
             [typeof(Hash32)] = "0x",
@@ -38,8 +38,8 @@ namespace IconSDK.Types
 
         public readonly ImmutableArray<byte> Binary;
 
-        public int Size => _sizes[this.GetType()];
-        public string Prefix => _prefixes[this.GetType()];
+        public int Size => Sizes[this.GetType()];
+        public string Prefix => Prefixes[this.GetType()];
 
         public Bytes(IEnumerable<byte> bytes)
         {
