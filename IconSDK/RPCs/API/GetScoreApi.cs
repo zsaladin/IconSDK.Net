@@ -41,6 +41,8 @@ namespace IconSDK.RPCs
             public readonly ScoreApiValue[] Inputs;
             [JsonProperty]
             public readonly ScoreApiValue[] Outputs;
+            [JsonProperty]
+            public readonly bool? Readonly;
         }
 
         public class ScoreApiValue

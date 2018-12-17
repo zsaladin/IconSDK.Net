@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.Numerics;
 using NUnit.Framework;
+using Newtonsoft;
 using Newtonsoft.Json;
 
 namespace IconSDK.Tests
@@ -154,6 +155,11 @@ namespace IconSDK.Tests
         [Test]
         public async Task Test_Call()
         {
+            var getScoreApi = new GetScoreApi(Consts.ApiUrl.TestNet);
+            var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
+
+            Console.WriteLine(JsonConvert.SerializeObject(scoreApi, Formatting.Indented));
+
             var privateKey = PrivateKey.Random();
             var address = Addresser.Create(privateKey);
 

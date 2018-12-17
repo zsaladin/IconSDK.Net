@@ -22,6 +22,7 @@ namespace IconSDK.RPCs
                 new BigIntegerConverter(),
                 new DictionaryConverter(),
                 new BoolConverter(),
+                new BoolNullableConverter(),
                 new BytesConverter<Bytes>(),
                 new BytesConverter<Hash32>(),
                 new BytesConverter<ExternalAddress>(),
