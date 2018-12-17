@@ -163,15 +163,27 @@ namespace IconSDK.Tests
             var privateKey = PrivateKey.Random();
             var address = Addresser.Create(privateKey);
 
-            var call = new Call<bool>(Consts.ApiUrl.TestNet);
+            var call = new Call(Consts.ApiUrl.TestNet);
             var result = await call.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                ("address", address)
+            );
+
+            // 0x0
+            Console.WriteLine(result);
+
+            var call0 = new Call<bool>(Consts.ApiUrl.TestNet);
+            var result0 = await call0.Invoke(
                 address,
                 "cx0000000000000000000000000000000000000001",
                 "isDeployer",
                 ("address", address)
              );
 
-            Console.WriteLine(result);
+            // false
+            Console.WriteLine(result0);
 
             var call1 = new Call<IsDeployerRequestParam, bool>(Consts.ApiUrl.TestNet);
             var result1 = await call1.Invoke(
@@ -181,6 +193,7 @@ namespace IconSDK.Tests
                 new IsDeployerRequestParam() { Address = address }
              );
 
+            // false
             Console.WriteLine(result1);
 
             var call2 = new Call<BigInteger>(Consts.ApiUrl.TestNet);

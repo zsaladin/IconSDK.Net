@@ -42,4 +42,17 @@ namespace IconSDK.RPCs
             return new Call<TResponseParam>(url).Invoke;
         }
     }
+
+    public class Call : Call<string>
+    {
+        public Call(string url) : base(url)
+        {
+
+        }
+
+        public static new Func<Address, Address, string, IDictionary<string, object>, Task<string>> Create(string url)
+        {
+            return new Call(url).Invoke;
+        }
+    }
 }

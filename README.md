@@ -113,14 +113,26 @@ var privateKey = PrivateKey.Random();
 var address = Addresser.Create(privateKey);
 
 // Call
+var call = new Call(Consts.ApiUrl.TestNet);
+var result = await call.Invoke(
+    address,
+    "cx0000000000000000000000000000000000000001",
+    "isDeployer",
+    ("address", address)
+);
+
+// 0x0
+Console.WriteLine(result);
+
 var call0 = new Call<bool>(Consts.ApiUrl.TestNet);
 var result0 = await call0.Invoke(
     address,
     "cx0000000000000000000000000000000000000001",
     "isDeployer",
     ("address", address)
-    );
+);
 
+// false
 Console.WriteLine(result0);
 
 var call1 = new Call<BigInteger>(Consts.ApiUrl.TestNet);
@@ -151,7 +163,6 @@ Console.WriteLine(JsonConvert.SerializeObject(result2));
 ### TODO
 - Nuget
 - Unity Asset store
-- RPC Call Improvement
 - Transaction Improvement(Deploy, Call, Message)
 - Sync RPC
 - Query v2 tx
