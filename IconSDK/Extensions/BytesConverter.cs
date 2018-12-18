@@ -5,15 +5,20 @@ using Newtonsoft.Json;
 namespace IconSDK.Extensions
 {
     using Types;
-    public class BytesConverter<TBytes> : JsonConverter<TBytes> where TBytes : Bytes
+    public class BytesConverter<TBytes> : JsonConverter where TBytes : Bytes
     {
-        public override TBytes ReadJson(JsonReader reader, Type objectType, TBytes existingValue, bool hasExistingValue, JsonSerializer serializer)
+        public override bool CanConvert(Type objectType)
         {
-            string s = (string)reader.Value;
-            return (TBytes)Activator.CreateInstance(typeof(TBytes), s);
+            return typeof(TBytes) == objectType;
         }
 
-        public override void WriteJson(JsonWriter writer, TBytes value, JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+        {
+            string s = (string)reader.Value;
+            return Activator.CreateInstance(typeof(TBytes), s);
+        }
+
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             writer.WriteValue(value.ToString());
         }
