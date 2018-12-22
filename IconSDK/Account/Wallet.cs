@@ -59,7 +59,7 @@ namespace IconSDK.Account
 
         public async Task<Hash32> Transfer(Address to, BigInteger amount, BigInteger stepLimit, int? networkID = null)
         {
-            var builder = new TransactionBuilder();
+            var builder = new TransferTransactionBuilder();
             builder.PrivateKey = PrivateKey;
             builder.To = to;
             builder.Value = amount;

@@ -11,7 +11,7 @@ namespace IconSDK.Blockchain
     using Types;
     using Extensions;
 
-    public class TransactionBuilder
+    public abstract class TransactionBuilder<TData>
     {
         public string Version = "0x3";
         public PrivateKey PrivateKey;
@@ -22,8 +22,8 @@ namespace IconSDK.Blockchain
         public BigInteger? NID;
         public BigInteger? Timestamp;
 
-        public string DataType;
-        public object Data;
+        protected abstract string RawDataType { get; }
+        protected abstract TData RawData { get; }
 
         public Transaction Build()
         {
@@ -32,7 +32,7 @@ namespace IconSDK.Blockchain
            Signature signature = Signer.Sign(hash, PrivateKey);
 
            return new Transaction(
-               Version, from, To, Value, StepLimit, Nonce, NID, Timestamp, DataType, Data, hash, signature
+               Version, from, To, Value, StepLimit, Nonce, NID, Timestamp, RawDataType, RawData, hash, signature
            );
         }
 
@@ -56,17 +56,67 @@ namespace IconSDK.Blockchain
             if (Nonce.HasValue)
                 param["nonce"] = Nonce.Value.ToHex0x();
 
-            if (DataType != null && Data != null)
+            var rawDataType = RawDataType;
+            if (rawDataType != null)
+                param["dataType"] = rawDataType;
+
+            var rawData = RawData;
+            if (rawData != null)
             {
-                var message = Data as string;
-                if (message != null)
-                    param["data"] = new Bytes(Encoding.UTF8.GetBytes(message)).ToHex();
-                else
-                    param["data"] = Data;
-                param["dataType"] = DataType;
+                param["data"] = ConvertToString(rawData);
             }
 
             return Hasher.Digest(param);
+        }
+
+        private object ConvertToString(object rawDataValue)
+        {
+            var stringValue = rawDataValue as string;
+            if (stringValue != null)
+                return stringValue;
+
+            var bytesValue = rawDataValue as Bytes;
+            if (bytesValue != null)
+                return bytesValue.ToString();
+
+            if (rawDataValue.GetType() == typeof(BigInteger))
+            {
+                var bigInteger = (BigInteger)rawDataValue;
+                return bigInteger.ToHex0x();
+            }
+
+            var dictValue = rawDataValue as IDictionary<string, object>;
+            if (dictValue != null)
+                return ConvertToString(dictValue);
+
+            string msg = $"Not supported value, type: {rawDataValue.GetType()}, value: {rawDataValue}";
+            throw new FormatException(msg);
+        }
+
+        private IDictionary<string, object> ConvertToString(IDictionary<string, object> rawDataDict)
+        {
+            Dictionary<string, object> newDict = new Dictionary<string, object>();
+            foreach (var pair in rawDataDict)
+            {
+                newDict[pair.Key] = ConvertToString(pair.Value);
+            }
+            return newDict;
+        }
+    }
+
+    public class TransactionBuilder : TransactionBuilder<object>
+    {
+        public string DataType { get; set; }
+        public object Data { get; set; }
+
+        protected override string RawDataType
+        {
+            get { return DataType; }
+        }
+
+        protected override object RawData
+        {
+            get { return Data; }
         }
     }
 }

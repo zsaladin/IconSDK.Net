@@ -91,7 +91,7 @@ var getTotalSupply = new GetTotalSupply(Consts.ApiUrl.TestNet);
 var totalSupply = await getTotalSupply.Invoke();
 
 // SendTransaction
-var txBuilder = new TransactionBuilder();
+var txBuilder = new TransferTransactionBuilder();
 txBuilder.PrivateKey = PrivateKey.Random();  // Your private key
 txBuilder.To = "hx0000000000000000000000000000000000000000";
 txBuilder.Value = 10 * Consts.Loop2ICX;
@@ -163,6 +163,5 @@ Console.WriteLine(JsonConvert.SerializeObject(result2));
 ### TODO
 - Nuget
 - Unity Asset store
-- Transaction Improvement(Deploy, Call, Message)
 - Sync RPC
 - Query v2 tx
