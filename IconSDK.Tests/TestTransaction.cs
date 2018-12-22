@@ -21,7 +21,7 @@ namespace IconSDK.Tests
             builder.PrivateKey = PrivateKey.Random();
             builder.To = "hx54f7853dc6481b670caf69c5a27c7c8fe5be8269";
             builder.StepLimit = BigInteger.Pow(10, 17);
-            builder.Value = 1 * Consts.Loop2ICX;
+            builder.Value = 1 * Consts.ICX2Loop;
             builder.Timestamp = 100000000000;
 
             var tx = builder.Build();
@@ -53,7 +53,7 @@ namespace IconSDK.Tests
             builder.PrivateKey = PrivateKey.Random();
             builder.To = "hx54f7853dc6481b670caf69c5a27c7c8fe5be8269";
             builder.StepLimit = BigInteger.Pow(10, 17);
-            builder.Value = 1 * Consts.Loop2ICX;
+            builder.Value = 1 * Consts.ICX2Loop;
             builder.Timestamp = 100000000000;
             builder.Message = "testMessage";
 
@@ -86,7 +86,7 @@ namespace IconSDK.Tests
             builder.PrivateKey = PrivateKey.Random();
             builder.To = "cx54f7853dc6481b670caf69c5a27c7c8fe5be8269";
             builder.StepLimit = BigInteger.Pow(10, 17);
-            builder.Value = 1 * Consts.Loop2ICX;
+            builder.Value = 1 * Consts.ICX2Loop;
             builder.Timestamp = 100000000000;
             builder.Method = "transfer";
             builder.Params["to"] = new ExternalAddress("hx54f7853dc6481b670caf69c5a27c7c8fe5be8269");

@@ -4,7 +4,7 @@ namespace IconSDK
 {
     public static class Consts
     {
-        public static readonly BigInteger Loop2ICX = BigInteger.Pow(10, 18);
+        public static readonly BigInteger ICX2Loop = BigInteger.Pow(10, 18);
 
         public static class ApiUrl
         {

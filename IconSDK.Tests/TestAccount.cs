@@ -20,7 +20,7 @@ namespace IconSDK.Tests
 
             Assert.AreEqual(balance, new BigInteger(0));
 
-            Task task = wallet.Transfer("hxffffffffffffffffffffffffffffffffffffffff", 1 * Consts.Loop2ICX, 1000000000);
+            Task task = wallet.Transfer("hxffffffffffffffffffffffffffffffffffffffff", 1 * Consts.ICX2Loop, 1000000000);
             Assert.CatchAsync(async () => await task);
         }
 
