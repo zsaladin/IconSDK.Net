@@ -90,12 +90,8 @@ var block = await getLastBlock();
 var getTotalSupply = new GetTotalSupply(Consts.ApiUrl.TestNet);
 var totalSupply = await getTotalSupply.Invoke();
 
-// GetScoreApi
-var getScoreApi = new GetScoreApi(Consts.Api.Url.TestNet);
-var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
-
 // SendTransaction
-var txBuilder = new TransactionBuilder();
+var txBuilder = new TransferTransactionBuilder();
 txBuilder.PrivateKey = PrivateKey.Random();  // Your private key
 txBuilder.To = "hx0000000000000000000000000000000000000000";
 txBuilder.Value = 10 * Consts.Loop2ICX;
@@ -106,6 +102,56 @@ var sendTransaction = new SendTransaction(Consts.ApiUrl.TestNet);
 
 // It will raise an exception if your address does not have ICX enough.
 var txHash = await sendTransaction.Invoke(tx);
+
+// GetScoreApi
+var getScoreApi = new GetScoreApi(Consts.ApiUrl.TestNet);
+var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
+
+Console.WriteLine(JsonConvert.SerializeObject(scoreApi, Formatting.Indented));
+
+var privateKey = PrivateKey.Random();
+var address = Addresser.Create(privateKey);
+
+// Call
+var call = new Call(Consts.ApiUrl.TestNet);
+var result = await call.Invoke(
+    address,
+    "cx0000000000000000000000000000000000000001",
+    "isDeployer",
+    ("address", address)
+);
+
+// 0x0
+Console.WriteLine(result);
+
+var call0 = new Call<bool>(Consts.ApiUrl.TestNet);
+var result0 = await call0.Invoke(
+    address,
+    "cx0000000000000000000000000000000000000001",
+    "isDeployer",
+    ("address", address)
+);
+
+// false
+Console.WriteLine(result0);
+
+var call1 = new Call<BigInteger>(Consts.ApiUrl.TestNet);
+var result1 = await call1.Invoke(
+    address,
+    "cx0000000000000000000000000000000000000001",
+    "getStepPrice"
+);
+
+Console.WriteLine(result1);
+
+var call2 = new Call<Dictionary<string, BigInteger>>(Consts.ApiUrl.TestNet);
+var result2 = await call2.Invoke(
+    address,
+    "cx0000000000000000000000000000000000000001",
+    "getStepCosts"
+);
+
+Console.WriteLine(JsonConvert.SerializeObject(result2));
 ```
 
 ## Requirements
@@ -117,7 +163,5 @@ var txHash = await sendTransaction.Invoke(tx);
 ### TODO
 - Nuget
 - Unity Asset store
-- RPC Call Improvement
-- Transaction Improvement(Deploy, Call, Message)
 - Sync RPC
 - Query v2 tx

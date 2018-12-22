@@ -48,11 +48,15 @@ namespace IconSDK.RPCs
             [JsonProperty]
             public readonly BigInteger CumulativeStepUsed;
             [JsonProperty]
+            public readonly ContractAddress ScoreAddress;
+            [JsonProperty]
             public readonly EventLog[] EventLogs;
             [JsonProperty]
             public readonly string LogsBloom;
             [JsonProperty]
-            public readonly BigInteger Status;
+            public readonly bool Status;
+            [JsonProperty]
+            public readonly Failure Failure;
         }
 
         public class EventLog
@@ -63,6 +67,14 @@ namespace IconSDK.RPCs
             public readonly string[] Indexed;
             [JsonProperty]
             public readonly string[] Data;
+        }
+
+        public class Failure
+        {
+            [JsonProperty]
+            public readonly BigInteger Code;
+            [JsonProperty]
+            public readonly string Message;
         }
     }
 

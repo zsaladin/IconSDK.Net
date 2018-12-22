@@ -8,6 +8,7 @@ using Newtonsoft.Json.Serialization;
 namespace IconSDK.RPCs
 {
     using Extensions;
+    using Types;
 
     public class RPC<TRPCRequestMessage, TRPCResponseMessage>
         where TRPCRequestMessage : RPCRequestMessage
@@ -19,7 +20,14 @@ namespace IconSDK.RPCs
             Converters = new JsonConverter[]
             {
                 new BigIntegerConverter(),
-                new DictionaryConverter()
+                new DictionaryConverter(),
+                new BoolConverter(),
+                new BoolNullableConverter(),
+                new BytesConverter<Bytes>(),
+                new BytesConverter<Hash32>(),
+                new BytesConverter<ExternalAddress>(),
+                new BytesConverter<ContractAddress>(),
+                new BytesConverter<Signature>(),
             }
         };
 

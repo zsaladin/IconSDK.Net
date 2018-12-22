@@ -30,8 +30,9 @@ namespace IconSDK.Account
 
         public static KeyStore Load(string password, string filePath)
         {
-            var file = File.OpenText(filePath);
-            var json = file.ReadToEnd();
+            string json;
+            using (var file = File.OpenText(filePath))
+                json = file.ReadToEnd();
 
             var privateKey = _keyStoreService.DecryptKeyStoreFromJson(password, json);
             var address = _keyStoreService.GetAddressFromKeyStore(json);

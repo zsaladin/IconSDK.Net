@@ -38,12 +38,16 @@ namespace IconSDK.RPCs
             [JsonProperty]
             public readonly string Name;
             [JsonProperty]
-            public readonly ScoreApiValue[] Inputs;
+            public readonly ScoreApiInput[] Inputs;
             [JsonProperty]
-            public readonly ScoreApiValue[] Outputs;
+            public readonly ScoreApiOutput[] Outputs;
+            [JsonProperty]
+            public readonly bool? Readonly;
+            [JsonProperty]
+            public readonly bool? Payable;
         }
 
-        public class ScoreApiValue
+        public class ScoreApiInput
         {
             [JsonProperty]
             public readonly string Type;
@@ -51,6 +55,12 @@ namespace IconSDK.RPCs
             public readonly string Name;
             [JsonProperty]
             public readonly BigInteger? Indexed;
+        }
+
+        public class ScoreApiOutput
+        {
+            [JsonProperty]
+            public readonly string Type;
         }
     }
 

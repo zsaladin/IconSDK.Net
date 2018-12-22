@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Reflection;
+using System.Numerics;
 using NUnit.Framework;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace IconSDK.Tests
 {
@@ -10,6 +13,7 @@ namespace IconSDK.Tests
     using Blockchain;
     using Types;
     using Extensions;
+    using Crypto;
 
     public class TestRPC
     {
@@ -140,12 +144,130 @@ namespace IconSDK.Tests
             Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
             Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x21cb4");
             Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x21cb4");
+            Assert.AreEqual(transactionResult.ScoreAddress, null);
             Assert.AreEqual(transactionResult.To.ToString(), "cx0000000000000000000000000000000000000001");
-            Assert.AreEqual(transactionResult.Status.ToHex0x(), "0x1");
+            Assert.AreEqual(transactionResult.Status, true);
+            Assert.AreEqual(transactionResult.Failure, null);
             Assert.AreEqual(transactionResult.EventLogs[0].ScoreAddress, "cx0000000000000000000000000000000000000001");
             Assert.AreEqual(transactionResult.EventLogs[0].Indexed[0], "AddImportWhiteListLog(str,int)");
             Assert.AreEqual(transactionResult.EventLogs[0].Data[0], "[('struct', ['pack', 'unpack'])]");
             Assert.AreEqual(transactionResult.EventLogs[0].Data[1], "0x1");
+        }
+
+        [Test]
+        public async Task Test_GetTransactionResultDeploy()
+        {
+            // Link : https://trackerdev.icon.foundation/transaction/0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5
+            var getTransactionResult = GetTransactionResult.Create(Consts.ApiUrl.TestNet);
+            var transactionResult = await getTransactionResult("0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5");
+
+            Assert.AreEqual(transactionResult.BlockHeight.ToHex0x(), "0xa3f6");
+            Assert.AreEqual(transactionResult.BlockHash.ToHex0x(), "0x630cbf0d88655aecff755250c06d1100ce0e95e41588dc3e1b67c14bb7244cf5");
+            Assert.AreEqual(transactionResult.TxHash, "0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5");
+            Assert.AreEqual(transactionResult.TxIndex.ToHex0x(), "0x0");
+            Assert.AreEqual(transactionResult.LogsBloom, "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
+            Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x3e4e3778");
+            Assert.AreEqual(transactionResult.ScoreAddress.ToHexcx(), "cxfb9e68c6944dd3872213db5fd68ae2fc7e32197f");
+            Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x3e4e3778");
+            Assert.AreEqual(transactionResult.To.ToString(), "cx0000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.Status, true);
+            Assert.AreEqual(transactionResult.Failure, null);
+        }
+
+        [Test]
+        public async Task Test_GetTransactionResultFailure()
+        {
+            // Link : https://trackerdev.icon.foundation/transaction/0x6e5229ae253ad2ac3735a4c34696f9595cc3259648e4138a496c79fb7a0baa2a
+            var getTransactionResult = GetTransactionResult.Create(Consts.ApiUrl.TestNet);
+            var transactionResult = await getTransactionResult("0x6e5229ae253ad2ac3735a4c34696f9595cc3259648e4138a496c79fb7a0baa2a");
+
+            Assert.AreEqual(transactionResult.BlockHeight.ToHex0x(), "0xa3fb");
+            Assert.AreEqual(transactionResult.BlockHash.ToHex0x(), "0xaa74dc339be4a51832d38ee0fb102191088d53d96e836585edd49b15f70886a6");
+            Assert.AreEqual(transactionResult.TxHash.ToHex0x(), "0x6e5229ae253ad2ac3735a4c34696f9595cc3259648e4138a496c79fb7a0baa2a");
+            Assert.AreEqual(transactionResult.TxIndex.ToHex0x(), "0x0");
+            Assert.AreEqual(transactionResult.LogsBloom, "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
+            Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x214d0");
+            Assert.AreEqual(transactionResult.ScoreAddress, null);
+            Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x214d0");
+            Assert.AreEqual(transactionResult.To.ToString(), "cx53d57899b63611f49aac1413603c7586ede767e3");
+            Assert.AreEqual(transactionResult.Status, false);
+            Assert.AreEqual(transactionResult.Failure.Code.ToHex0x(), "0x7d00");
+            Assert.AreEqual(transactionResult.Failure.Message, "transfer() got an unexpected keyword argument 'to'");
+        }
+
+        [Test]
+        public async Task Test_Call()
+        {
+            var getScoreApi = new GetScoreApi(Consts.ApiUrl.TestNet);
+            var scoreApi = await getScoreApi.Invoke("cx0000000000000000000000000000000000000001");
+
+            Console.WriteLine(JsonConvert.SerializeObject(scoreApi, Formatting.Indented));
+
+            var privateKey = PrivateKey.Random();
+            var address = Addresser.Create(privateKey);
+
+            var call = new Call(Consts.ApiUrl.TestNet);
+            var result = await call.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                ("address", address)
+            );
+
+            // 0x0
+            Console.WriteLine(result);
+
+            var call0 = new Call<bool>(Consts.ApiUrl.TestNet);
+            var result0 = await call0.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                ("address", address)
+             );
+
+            // false
+            Console.WriteLine(result0);
+
+            var call1 = new Call<IsDeployerRequestParam, bool>(Consts.ApiUrl.TestNet);
+            var result1 = await call1.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "isDeployer",
+                new IsDeployerRequestParam() { Address = address }
+             );
+
+            // false
+            Console.WriteLine(result1);
+
+            var call2 = new Call<BigInteger>(Consts.ApiUrl.TestNet);
+            var result2 = await call2.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getStepPrice"
+            );
+
+            Console.WriteLine(result2);
+
+            var call3 = new Call<GetRevisionResponseParam>(Consts.ApiUrl.TestNet);
+            var result3 = await call3.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getRevision"
+            );
+
+            Console.WriteLine(result3.Code);
+            Console.WriteLine(result3.Name);
+
+            var call4 = new Call<Dictionary<string, BigInteger>>(Consts.ApiUrl.TestNet);
+            var result4 = await call4.Invoke(
+                address,
+                "cx0000000000000000000000000000000000000001",
+                "getStepCosts"
+            );
+
+            Console.WriteLine(JsonConvert.SerializeObject(result4));
         }
 
         [Test]
@@ -186,6 +308,17 @@ namespace IconSDK.Tests
 
             var gendTransactin = new SendTransaction(Consts.ApiUrl.TestNet);
             Assert.ThrowsAsync(typeof(RPCInvalidRequestException), async () => await gendTransactin.Invoke(tx));
+        }
+
+        class IsDeployerRequestParam
+        {
+            public Address Address;
+        }
+
+        class GetRevisionResponseParam
+        {
+            public BigInteger Code = 0;
+            public string Name = string.Empty;
         }
     }
 }

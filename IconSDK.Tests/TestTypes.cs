@@ -46,7 +46,7 @@ namespace IconSDK.Tests
         public void Test_AddressEquality()
         {
             Address address = "hx0000000000000000000000000000000000000000";
-            Bytes bytes = "0000000000000000000000000000000000000000";
+            Bytes bytes = "0x0000000000000000000000000000000000000000";
 
             Assert.IsTrue(Enumerable.SequenceEqual(address.Binary, bytes.Binary));
             Assert.IsTrue(address != bytes);
