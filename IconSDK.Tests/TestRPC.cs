@@ -317,8 +317,8 @@ namespace IconSDK.Tests
 
         class GetRevisionResponseParam
         {
-            public BigInteger Code;
-            public string Name;
+            public BigInteger Code = 0;
+            public string Name = string.Empty;
         }
     }
 }
