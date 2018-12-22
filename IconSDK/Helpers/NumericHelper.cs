@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Numerics;
 
-namespace IconSDK
+namespace IconSDK.Helpers
 {
-    public static class Helper
+    public static class NumericsHelper
     {
         public static BigInteger ICX2Loop(string icx)
         {
