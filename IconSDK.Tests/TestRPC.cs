@@ -144,12 +144,33 @@ namespace IconSDK.Tests
             Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
             Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x21cb4");
             Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x21cb4");
+            Assert.AreEqual(transactionResult.ScoreAddress, null);
             Assert.AreEqual(transactionResult.To.ToString(), "cx0000000000000000000000000000000000000001");
             Assert.AreEqual(transactionResult.Status.ToHex0x(), "0x1");
             Assert.AreEqual(transactionResult.EventLogs[0].ScoreAddress, "cx0000000000000000000000000000000000000001");
             Assert.AreEqual(transactionResult.EventLogs[0].Indexed[0], "AddImportWhiteListLog(str,int)");
             Assert.AreEqual(transactionResult.EventLogs[0].Data[0], "[('struct', ['pack', 'unpack'])]");
             Assert.AreEqual(transactionResult.EventLogs[0].Data[1], "0x1");
+        }
+
+        [Test]
+        public async Task Test_GetTransactionResultDeploy()
+        {
+            // Link : https://trackerdev.icon.foundation/transaction/0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5
+            var getTransactionResult = GetTransactionResult.Create(Consts.ApiUrl.TestNet);
+            var transactionResult = await getTransactionResult("0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5");
+
+            Assert.AreEqual(transactionResult.BlockHeight.ToHex0x(), "0xa3f6");
+            Assert.AreEqual(transactionResult.BlockHash.ToHex0x(), "0x630cbf0d88655aecff755250c06d1100ce0e95e41588dc3e1b67c14bb7244cf5");
+            Assert.AreEqual(transactionResult.TxHash, "0x728de8ec128bb452f1e76bc524f07b24c63c9f40449a4e10356d852bebdc0ce5");
+            Assert.AreEqual(transactionResult.TxIndex.ToHex0x(), "0x0");
+            Assert.AreEqual(transactionResult.LogsBloom, "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.StepPrice.ToHex0x(), "0x2540be400");
+            Assert.AreEqual(transactionResult.StepUsed.ToHex0x(), "0x3e4e3778");
+            Assert.AreEqual(transactionResult.ScoreAddress.ToHexcx(), "cxfb9e68c6944dd3872213db5fd68ae2fc7e32197f");
+            Assert.AreEqual(transactionResult.CumulativeStepUsed.ToHex0x(), "0x3e4e3778");
+            Assert.AreEqual(transactionResult.To.ToString(), "cx0000000000000000000000000000000000000000");
+            Assert.AreEqual(transactionResult.Status.ToHex0x(), "0x1");
         }
 
         [Test]
