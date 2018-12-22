@@ -33,6 +33,8 @@ wallet = Wallet.Load("yourPassword", "yourKeystorePath");
 
 ## Installation
 
+### Nuget
+- https://www.nuget.org/packages/IconSDK.Net/
 ### Referencing this project as a library.
 ```Shell
 $ git clone https://github.com/zsaladin/IconSDK.Net
@@ -161,7 +163,6 @@ Console.WriteLine(JsonConvert.SerializeObject(result2));
   - [nethereum.keystore](https://www.nuget.org/packages/Nethereum.KeyStore/)
 
 ### TODO
-- Nuget
 - Unity Asset store
 - Sync RPC
 - Query v2 tx
